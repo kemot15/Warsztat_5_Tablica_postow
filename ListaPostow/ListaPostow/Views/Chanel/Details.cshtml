@@ -1,0 +1,54 @@
+﻿@model IList<ListaPostow.Models.Db.Chanel>
+
+@{
+    ViewData["Title"] = "Kanały";
+}
+
+<h1>Kanały</h1>
+
+<p>
+    <a asp-action="Create">Dodaj nowy kanał</a>
+</p>
+
+@ViewBag.domyslny
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nazwa
+            </th>
+            <th >
+                Kolor
+            </th>
+            <th>
+                Wlasciciel
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr style="background-color: @item.Color">
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.UserName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                @if (ViewBag.domyslny != item.ID)
+                {
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                }
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

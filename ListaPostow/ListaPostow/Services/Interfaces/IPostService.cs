@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ListaPostow.Services.Interfaces
 {
-    interface IPostService
+    public interface IPostService
     {
     }
 }

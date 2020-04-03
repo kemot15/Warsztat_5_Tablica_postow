@@ -10,7 +10,7 @@ namespace ListaPostow.Controllers
     {
         public IActionResult Index()
         {
-            return Content("asd");
+            return View();
         }
     }
 }

@@ -49,6 +49,21 @@ namespace ListaPostow.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Chanels",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
+                    Color = table.Column<string>(nullable: true),
+                    OwnerID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chanels", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -155,28 +170,6 @@ namespace ListaPostow.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chanels",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 255, nullable: false),
-                    Color = table.Column<string>(nullable: true),
-                    OwnerID = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chanels", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Chanels_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ChanelUsers",
                 columns: table => new
                 {
@@ -268,11 +261,6 @@ namespace ListaPostow.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Chanels_UserId",
-                table: "Chanels",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChanelUsers_ChanelID",

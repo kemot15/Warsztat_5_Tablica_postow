@@ -14,7 +14,7 @@ namespace ListaPostow.Models.Db
         public string Name { get; set; }
         public string Color { get; set; }
         public int OwnerID { get; set; }
-        public User User { get; set; }
+        public User Owner { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<ChanelUsers> ChanelUsers { get; set; }
     }
