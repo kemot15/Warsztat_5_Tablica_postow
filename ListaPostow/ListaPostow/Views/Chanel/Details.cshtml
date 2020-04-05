@@ -1,54 +1,50 @@
-﻿@model IList<ListaPostow.Models.Db.Chanel>
+﻿@model ChanelDetailViewModel
 
 @{
     ViewData["Title"] = "Kanały";
 }
 
-<h1>Kanały</h1>
 
-<p>
-    <a asp-action="Create">Dodaj nowy kanał</a>
-</p>
+<div class="border-white">
+    <div style="background-color: @Model.Chanel.Color">
+        Kanał: @Model.Chanel.Name
+    </div>
+    <div>
+        <form asp-action="Falow">
+            <input type="hidden" asp-for="ChanelID" value="@Model.Chanel.ID" />
+            <input type="hidden" asp-for="Visible" value="@Model.Visible" />
 
-@ViewBag.domyslny
+            @if (Model.Visible)
+            {
+                @*<a asp-action="Falow" class="btn btn-danger rounded-0 text-light m-1">Porzuc</a>*@
+                <button type="submit">Porzuc</button>
+            }
+            else
+            {
+                @*<a asp-action="Falow" class="btn btn-warning rounded-0 text-light m-1">Obserwuj</a>*@
+                <button type="submit">Obserwuj</button>
+            }
+        </form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Nazwa
-            </th>
-            <th >
-                Kolor
-            </th>
-            <th>
-                Wlasciciel
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr style="background-color: @item.Color">
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.UserName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                @if (ViewBag.domyslny != item.ID)
-                {
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                }
+    </div>
+    @foreach (var item in Model.Chanel.Posts)
+    {
+        <div class="col-10">
+            @Html.DisplayFor(text => item.Text)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(data => item.CreateDate)
+            @Html.DisplayFor(author => item.User.UserName)
+        </div>
+    }
+</div>
+<div class="align-self-md-end">
+    @Html.ValidationSummary()
+    <form asp-action="Add" asp-controller="Post">
+        <input type="hidden" asp-for="ChanelID" value="@Model.Chanel.ID" />
+        <textarea asp-for="PostMessage"></textarea>
+        <span asp-validation-for="PostMessage"></span>
+        <button type="submit">Dodaj post</button>
+    </form>
+</div>
 
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

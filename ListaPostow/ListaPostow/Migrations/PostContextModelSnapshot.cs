@@ -39,6 +39,8 @@ namespace ListaPostow.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("OwnerID");
+
                     b.ToTable("Chanels");
                 });
 
@@ -54,6 +56,9 @@ namespace ListaPostow.Migrations
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Visable")
+                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -288,6 +293,15 @@ namespace ListaPostow.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("ListaPostow.Models.Db.Chanel", b =>
+                {
+                    b.HasOne("ListaPostow.Models.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ListaPostow.Models.Db.ChanelUsers", b =>

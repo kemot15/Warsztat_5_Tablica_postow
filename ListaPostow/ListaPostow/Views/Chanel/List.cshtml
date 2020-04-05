@@ -1,0 +1,33 @@
+﻿@model IList<ListaPostow.Models.Db.Chanel>
+
+@{
+    ViewData["Title"] = "Kanały";
+}
+
+<h1>Kanały</h1>
+
+<p>
+    <a asp-action="Create">Dodaj nowy kanał</a>
+</p>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nazwa
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="background-color: @item.Color">
+                <td>
+                    @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

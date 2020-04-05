@@ -68,7 +68,7 @@ namespace ListaPostow.Controllers
                 var result = await SignInManager.PasswordSignInAsync(loginViewModel.Login, loginViewModel.Password, false, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Details", "Chanel");
+                    return RedirectToAction("List", "Chanel");
                 }
                 else
                 {

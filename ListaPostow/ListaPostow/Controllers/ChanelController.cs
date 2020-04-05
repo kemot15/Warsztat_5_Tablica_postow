@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ListaPostow.Models;
 using ListaPostow.Models.Db;
+using ListaPostow.Models.ViewModels;
 using ListaPostow.Services;
 using ListaPostow.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -29,19 +30,24 @@ namespace ListaPostow.Controllers
             return View();
         }
 
-        // GET: Chanel/Details/5
-        public async Task<ActionResult> Details()
+        public async Task<IActionResult> List()
         {
-            
-            var user = await UserManager.GetUserAsync(User);
-            var defaultChanel = await _chanelService.GetDefaultUserChanelAsync(user.Id);
-            ViewBag.domyslny = defaultChanel.ID;
-            var chanelUserList = await _chanelService.GetUserChanelsAsync(user.Id);
-            return View(chanelUserList);
+            var chanels = await _chanelService.GetAllChanelsAsync();
+            return View(chanels);
         }
 
+        // GET: Chanel/Details/5
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var user = await UserManager.GetUserAsync(User);
+            var chanel = await _chanelService.ChanelDetailAsync(id, user);            
+            return View(chanel);
+        }
+
+
         // GET: Chanel/Create
-        public async Task<ActionResult> Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -49,7 +55,7 @@ namespace ListaPostow.Controllers
         // POST: Chanel/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Chanel chanel)
+        public async Task<IActionResult> Create(Chanel chanel)
         {
             var user = await UserManager.GetUserAsync(User);
             chanel.OwnerID = user.Id;            
@@ -102,5 +108,14 @@ namespace ListaPostow.Controllers
                 return View();
             }
         }
+
+        public async Task<IActionResult> Falow (ChanelDetailViewModel chanel)
+        {
+            var user = await UserManager.GetUserAsync(User);
+            await _chanelService.AddToFolowAsync(chanel.ChanelID, user, chanel.Visible);
+            return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
+
+        }
+        
     }
 }

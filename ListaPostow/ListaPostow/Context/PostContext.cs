@@ -16,9 +16,9 @@ namespace ListaPostow.Context
         {
 
         }
-
         
         public DbSet<Post> Posts { get; set; }
         public DbSet<Chanel> Chanels { get; set; }
+        public DbSet<ChanelUsers> ChanelUsers { get; set; }
     }
 }

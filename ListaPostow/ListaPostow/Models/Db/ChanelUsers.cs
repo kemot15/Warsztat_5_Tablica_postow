@@ -10,6 +10,8 @@ namespace ListaPostow.Models.Db
     {
         public int ID { get; set; }
         public int UserID { get; set; }
+
+        public bool Visable { get; set; }
         public int ChanelID { get; set; }
         [ForeignKey("UserID")]
         public User User { get; set; }
