@@ -52,6 +52,7 @@ namespace ListaPostow.Controllers
                         Color = "blue"
                     };
                     await _chanelService.CreateChanelAsync(chanel);
+                   // await _chanelService.AddToFavoriteAsync()
                     return RedirectToAction("Login");
                 }
             }            

@@ -29,6 +29,13 @@ namespace ListaPostow.Services
             };
             await _context.Posts.AddAsync(post);
             return await _context.SaveChangesAsync() >0;            
-        }        
+        }       
+        
+        public async Task<bool> DeleteAsync(int postID)
+        {
+            var post = _context.Posts.Single(p => p.ID == postID);
+            _context.Remove(post);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

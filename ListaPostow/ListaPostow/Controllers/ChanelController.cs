@@ -17,11 +17,13 @@ namespace ListaPostow.Controllers
     {
         private readonly UserManager<User> UserManager;
         private readonly IChanelService _chanelService;
+        private readonly IPostService _postService;
 
-        public ChanelController(UserManager<User> userManager, IChanelService chanelService)
+        public ChanelController(UserManager<User> userManager, IChanelService chanelService, IPostService postService)
         {
             UserManager = userManager;
             _chanelService = chanelService;
+            _postService = postService;
         }
 
         // GET: Chanel
@@ -43,7 +45,7 @@ namespace ListaPostow.Controllers
             var user = await UserManager.GetUserAsync(User);
             var chanel = await _chanelService.ChanelDetailAsync(id, user);            
             return View(chanel);
-        }
+        }      
 
 
         // GET: Chanel/Create
@@ -63,59 +65,80 @@ namespace ListaPostow.Controllers
             return View();            
         }
 
-        // GET: Chanel/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Chanel/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Chanel/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Chanel/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public async Task<IActionResult> Falow (ChanelDetailViewModel chanel)
+        public async Task<IActionResult> AddFavorite(ChanelDetailViewModel chanel)
         {
             var user = await UserManager.GetUserAsync(User);
-            await _chanelService.AddToFolowAsync(chanel.ChanelID, user, chanel.Visible);
+            await _chanelService.AddToFavoriteAsync(chanel.ChanelID, user, chanel.Visible);
             return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
 
         }
+
+
+
+        public async Task<IActionResult> Favorite ()
+        {
+            var user = await UserManager.GetUserAsync(User);
+            var chanelUser = await _chanelService.GetFavoritedUserChanelsAsync(user);
+            return View(chanelUser);
+        }
         
+        [HttpGet]
+        public async Task<IActionResult> FavoriteList()
+        {
+           
+            var user = await UserManager.GetUserAsync(User);
+            var chanels = await _chanelService.GetAllChanelsAsync();
+            var newChanelList = new List<Chanel>();
+            foreach (var chanel in chanels)
+            {   
+                var result = chanel.ChanelUsers.Where(ch => ch.ChanelID == chanel.ID && ch.User == user).Single();
+                if (result == null)
+                {
+                    result.ID = chanel.ID;
+                    result.UserID = user.Id;
+                    result.Chanel = chanel;
+                    result.User = user;
+                    result.Visable = false;
+                }
+                chanel.ChanelUsers.Add(result);
+                // chanelUser.Visable = result.Visable;                
+                newChanelList.Add(chanel);
+            }
+            var model = new FavoriteViewModel(newChanelList);
+
+
+            //var chanelsUser = await _chanelService.GetFavoritedUserChanelsAsync(user);
+            //foreach( var chanel in chanels)
+            //{
+            //    var chanelVisability = new FavoriteViewModel();
+            //    chanelVisability.Name = chanel.Name;
+            //    chanelVisability.ID = chanel.ID;
+            //    ChanelUsers? result = chanelsUser.SingleOrDefault(ch => ch.Chanel.Equals(chanel));
+            //    //chanelVisability.Visable = (result == null) ? false : result.Visable;
+            //    if (result == null)
+            //    {
+            //        chanelVisability.Visable = false;
+            //    }
+            //    else
+            //    {
+            //        chanelVisability.Visable = result.Visable;
+            //    }
+            //    model.Add(chanelVisability);   
+            //} 
+
+            return View(model);
+        }
+
+        //public async Task<IActionResult> FavoriteList1(IList<FavoriteViewModel> model)
+        public async Task<IActionResult> FavoriteList1(FavoriteViewModel model)
+        {
+            var user = await UserManager.GetUserAsync(User);
+            foreach (var chanel in model.Chanels)
+            {
+                await _chanelService.AddToFavoriteAsync(chanel.ID, user, !chanel.ChanelUsers.First().Visable);
+            }
+            return RedirectToAction("Favorite");
+        }
+
     }
 }

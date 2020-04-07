@@ -29,12 +29,18 @@ namespace ListaPostow.Services
 
         public async Task<List<Chanel>> GetAllChanelsAsync()
         {
-            return _context.Chanels.ToList();
+            return _context.Chanels.Include(ch => ch.ChanelUsers).ToList();
         }
 
         public async Task<List<Chanel>> GetUserChanelsAsync(int id)
         {            
             return await _context.Chanels.Where(u => u.OwnerID == id).Include(u => u.Owner).ToListAsync();
+        }
+
+        public async Task<List<ChanelUsers>> GetFavoritedUserChanelsAsync(User user)
+        {
+            var result = await _context.ChanelUsers.Include(ch => ch.Chanel).Where(u => u.User.Equals(user)).ToListAsync();
+            return result;
         }
 
         public async Task<Chanel> GetDefaultUserChanelAsync(int id)
@@ -56,10 +62,10 @@ namespace ListaPostow.Services
             return details;
         }
 
-        public async Task<bool> AddToFolowAsync(int id, User  user, bool visible)
+        public async Task<bool> AddToFavoriteAsync(int chanelId, User  user, bool visible)
         {
-            var result = _context.ChanelUsers.SingleOrDefault(u => u.ChanelID.Equals(id) && u.User.Equals(user));
-            var chanel = _context.Chanels.Single(ch => ch.ID.Equals(id));
+            var result = _context.ChanelUsers.SingleOrDefault(u => u.ChanelID.Equals(chanelId) && u.User.Equals(user));
+            var chanel = _context.Chanels.Single(ch => ch.ID.Equals(chanelId));
             if (result == null)
             {
                 var chanelUser = new ChanelUsers()
@@ -76,5 +82,12 @@ namespace ListaPostow.Services
             _context.Update(result);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        //public async Task<List<ChanelUsers>> GetAllChanelsWithVisabilityAsync()
+        //{
+        //    return _context.ChanelUsers.Include(ch => ch.Chanel).ToList();
+        //}
+
+
     }
 }

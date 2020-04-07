@@ -1,50 +1,56 @@
 ﻿@model ChanelDetailViewModel
+@inject UserManager<ListaPostow.Models.User> userManager
 
 @{
     ViewData["Title"] = "Kanały";
 }
 
 
-<div class="border-white">
-    <div style="background-color: @Model.Chanel.Color">
-        Kanał: @Model.Chanel.Name
-    </div>
-    <div>
-        <form asp-action="Falow">
+        <div class="border-white">
+            <div style="background-color: @Model.Chanel.Color">
+                Kanał: @Model.Chanel.Name
+            </div>
+            <div>
+                <form asp-action="AddFavorite">
+                    <input type="hidden" asp-for="ChanelID" value="@Model.Chanel.ID" />
+                    <input type="hidden" asp-for="Visible" value="@Model.Visible" />
+
+                    @if (Model.Visible)
+                    {
+                        @*<a asp-action="Falow" class="btn btn-danger rounded-0 text-light m-1">Porzuc</a>*@
+                        <button type="submit">Porzuc</button>
+                    }
+                    else
+                    {
+                        @*<a asp-action="Falow" class="btn btn-warning rounded-0 text-light m-1">Obserwuj</a>*@
+                        <button type="submit">Obserwuj</button>
+                    }
+                </form>
+
+            </div>
+            @foreach (var item in Model.Chanel.Posts)
+            {
+                <div class="col-10">
+                    @Html.DisplayFor(text => item.Text)
+                </div>
+                <div class="col-1">
+                    @Html.DisplayFor(data => item.CreateDate)
+                    @Html.DisplayFor(author => item.User.UserName)
+                    @if ((DateTime.Now - item.CreateDate).TotalMinutes < 10 && item.UserId == userManager.GetUserAsync(User).Result.Id)
+                    {
+                        @Html.ActionLink("Usuń", "Delete", "Post", new { postID = item.ID, chanelID = item.Chanel.ID }, new { onclick = "return confirm('Czy chcesz usunąć recepturę?')" })
+                        @*<a asp-action="Delete" asp-controller="Post" asp-route-id="@recipe.Id" class="btn btn-danger rounded-0 text-light m-1" onclick="return confirm('Czy chcesz usunąć recepturę?')">Usuń</a>*@
+                    }
+                </div>
+            }
+        </div>
+        <div class="align-self-md-end">
+            @Html.ValidationSummary()
+            <form asp-action="Add" asp-controller="Post">
             <input type="hidden" asp-for="ChanelID" value="@Model.Chanel.ID" />
-            <input type="hidden" asp-for="Visible" value="@Model.Visible" />
-
-            @if (Model.Visible)
-            {
-                @*<a asp-action="Falow" class="btn btn-danger rounded-0 text-light m-1">Porzuc</a>*@
-                <button type="submit">Porzuc</button>
-            }
-            else
-            {
-                @*<a asp-action="Falow" class="btn btn-warning rounded-0 text-light m-1">Obserwuj</a>*@
-                <button type="submit">Obserwuj</button>
-            }
-        </form>
-
-    </div>
-    @foreach (var item in Model.Chanel.Posts)
-    {
-        <div class="col-10">
-            @Html.DisplayFor(text => item.Text)
-        </div>
-        <div class="col-1">
-            @Html.DisplayFor(data => item.CreateDate)
-            @Html.DisplayFor(author => item.User.UserName)
-        </div>
-    }
-</div>
-<div class="align-self-md-end">
-    @Html.ValidationSummary()
-    <form asp-action="Add" asp-controller="Post">
-        <input type="hidden" asp-for="ChanelID" value="@Model.Chanel.ID" />
-        <textarea asp-for="PostMessage"></textarea>
-        <span asp-validation-for="PostMessage"></span>
-        <button type="submit">Dodaj post</button>
+            <textarea asp-for="PostMessage"></textarea>
+            <span asp-validation-for="PostMessage"></span>
+            <button type="submit">Dodaj post</button>
     </form>
 </div>
 

@@ -15,6 +15,7 @@ namespace ListaPostow.Services.Interfaces
         Task<List<Chanel>> GetUserChanelsAsync(int id);
         Task<Chanel> GetDefaultUserChanelAsync(int id);
         Task<ChanelDetailViewModel> ChanelDetailAsync(int id, User user);
-        Task<bool> AddToFolowAsync(int id, User user, bool visible);
+        Task<bool> AddToFavoriteAsync(int chanelId, User user, bool visible);
+        Task<List<ChanelUsers>> GetFavoritedUserChanelsAsync(User user);
     }
 }

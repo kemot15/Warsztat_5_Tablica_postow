@@ -30,17 +30,22 @@ namespace ListaPostow.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ChanelDetailViewModel chanel)
         {
-            //if (chanel.PostMessage == null)
-            //    return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Puste pole");
                 return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
             }
-                
+
             var user = await userManager.GetUserAsync(User);
             await postService.AddPostAsync(chanel.PostMessage, chanel.ChanelID, user);
-            return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID});
+            return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
+        }
+
+        
+        public async Task<IActionResult> Delete(int postID, int chanelID)
+        {
+            await postService.DeleteAsync(postID);
+            return RedirectToAction("Details", "Chanel", new { id = chanelID });
         }
     }
 }

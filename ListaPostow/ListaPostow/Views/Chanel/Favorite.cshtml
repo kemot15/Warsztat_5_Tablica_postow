@@ -1,0 +1,38 @@
+﻿@model IList<ListaPostow.Models.Db.ChanelUsers>
+
+@{
+    ViewData["Title"] = "Kanały";
+}
+
+<h1>Kanały</h1>
+
+<p>
+    <a asp-action="Create">Dodaj nowy kanał</a>
+</p>
+@Html.ActionLink("Strona glowna", "Index", "Home")
+@Html.ActionLink("lista kanałów", "Details", "Chanel")
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nazwa
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.Visable)
+            {
+                <tr style="background-color: @item.Chanel.Color">
+                    <td>
+                        @Html.ActionLink(item.Chanel.Name, "Details", "Chanel", new { id = item.Chanel.ID })
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
