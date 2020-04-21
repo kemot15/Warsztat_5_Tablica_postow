@@ -50,7 +50,7 @@ namespace ListaPostow.Services
 
         public async Task<ChanelDetailViewModel> ChanelDetailAsync(int id, User user)
         {
-            var chanel = await _context.Chanels.Include(p => p.Posts).Include(u => u.ChanelUsers).SingleAsync(c => c.ID == id);
+            var chanel = await _context.Chanels.Include(p => p.Posts).ThenInclude(u => u.User).Include(u => u.ChanelUsers).SingleAsync(c => c.ID == id);
             
             var visable = _context.ChanelUsers.SingleOrDefault(u => u.ChanelID.Equals(id) && u.User.Equals(user));
             var result = visable == null ? false : visable.Visable;

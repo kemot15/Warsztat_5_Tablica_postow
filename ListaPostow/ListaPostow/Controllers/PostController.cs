@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
 using ListaPostow.Models;
+using ListaPostow.Models.Db;
 using ListaPostow.Models.ViewModels;
 using ListaPostow.Services;
 using ListaPostow.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace ListaPostow.Controllers
 {
@@ -46,6 +50,24 @@ namespace ListaPostow.Controllers
         {
             await postService.DeleteAsync(postID);
             return RedirectToAction("Details", "Chanel", new { id = chanelID });
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit (int postID)
+        {
+            var post = await postService.GetAsync(postID);
+            var postModel = new EditPostViewModel()
+            {
+                Post = post,
+                ChanelID = post.Chanel.ID
+            };
+            return View(postModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit (EditPostViewModel editPostViewModel)
+        {   if (!ModelState.IsValid)
+                return View();
+            await postService.EditAsync(editPostViewModel.Post);
+            return RedirectToAction ("Details", "Chanel", new { id = editPostViewModel.ChanelID });
         }
     }
 }

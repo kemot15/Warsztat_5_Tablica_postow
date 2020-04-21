@@ -2,6 +2,7 @@
 using ListaPostow.Models;
 using ListaPostow.Models.Db;
 using ListaPostow.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,8 +34,19 @@ namespace ListaPostow.Services
         
         public async Task<bool> DeleteAsync(int postID)
         {
-            var post = _context.Posts.Single(p => p.ID == postID);
+            var post = await GetAsync(postID);
             _context.Remove(post);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Post> GetAsync (int postID)
+        {
+            return _context.Posts.Include(ch => ch.Chanel).Single(p => p.ID == postID);
+        }
+
+        public async Task<bool> EditAsync (Post post)
+        {
+            _context.Update(post);
             return await _context.SaveChangesAsync() > 0;
         }
     }

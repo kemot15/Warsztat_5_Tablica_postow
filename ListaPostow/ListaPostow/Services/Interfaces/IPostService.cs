@@ -1,4 +1,5 @@
 ﻿using ListaPostow.Models;
+using ListaPostow.Models.Db;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace ListaPostow.Services.Interfaces
     {
         Task<bool> AddPostAsync(string message, int chanelID, User user);
         Task<bool> DeleteAsync(int postID);
+        Task<Post> GetAsync(int postID);
+        Task<bool> EditAsync(Post post);
     }
 }
