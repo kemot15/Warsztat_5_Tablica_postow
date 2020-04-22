@@ -9,12 +9,15 @@ using ListaPostow.Models.Db;
 using ListaPostow.Models.ViewModels;
 using ListaPostow.Services;
 using ListaPostow.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
+
 namespace ListaPostow.Controllers
 {
+    [Authorize]
     public class PostController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -32,6 +35,7 @@ namespace ListaPostow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add(ChanelDetailViewModel chanel)
         {
             if (!ModelState.IsValid)
