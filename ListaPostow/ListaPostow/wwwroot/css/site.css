@@ -10,22 +10,37 @@
     align-items: center;
 }
 
+.container-position {
+    padding: initial
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /*------------------------------*/
 /*---- Main style ----*/
 /*------------------------------*/
-/*:root {
-  --link-color: #ff6600;
-  --light-link-color: #fffffa;
-  --background-color: #4b4c4a;
-  --lighter-background-color: #5a615f;
-  --lighter-text-color: #9fa292;
-  --dark-text: #000000;
-  --blue: #007bff;
-  --yellow: #ffc107;
-  --green: #1e7e34;
-  font-size: 16px;
-}*/
+:root {
+    --link-color: #ff6600;
+    --light-link-color: #fffffa;
+    --background-color: #4b4c4a;
+    --lighter-background-color: #5a615f;
+    --lighter-text-color: #9fa292;
+    --dark-text: #000000;
+    --blue: #007bff;
+    --yellow: #ffc107;
+    --green: #1e7e34;
+    font-size: 16px;
+}
 
+.remove-button {
+    background-color: red;
+    
+}
+
+.edit-button {
+    background-color: dodgerblue;
+}
 /** {
   margin: 0;
   padding: 0;
@@ -36,9 +51,11 @@ html {
   min-height: 100%;
 }
 body {
-    background:center url("../images/tlo.jpg")
-    background-color: aquamarine
+ 
+    background: url(../images/tlo.jpg) center  center;
+    background-attachment:fixed;
 }
+
 
 .page-header {
     background: var(--background-color);

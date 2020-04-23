@@ -41,7 +41,10 @@ namespace ListaPostow.Services
 
         public async Task<Post> GetAsync (int postID)
         {
-            return _context.Posts.Include(ch => ch.Chanel).Single(p => p.ID == postID);
+            var result = _context.Posts.Include(ch => ch.Chanel).SingleOrDefault(p => p.ID == postID);
+            if (result == null)
+                return null;
+            return result;
         }
 
         public async Task<bool> EditAsync (Post post)

@@ -58,14 +58,28 @@ namespace ListaPostow.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit (int postID)
         {
+            
             var post = await postService.GetAsync(postID);
-            var postModel = new EditPostViewModel()
+            if (post != null)
+            if ((DateTime.Now - post.CreateDate).TotalMinutes < 10 && post.UserId == userManager.GetUserAsync(User).Result.Id)
             {
-                Post = post,
-                ChanelID = post.Chanel.ID
-            };
-            return View(postModel);
+                var postModel = new EditPostViewModel()
+                {
+                    Post = post,
+                    ChanelID = post.Chanel.ID
+                };
+                return View(postModel);
+            }
+            //else
+            //{
+            //    ModelState.AddModelError("", "Probujesz edytowac post do ktorego nie masz dostepu");
+            //    return RedirectToAction("Details", "Chanel", new { id = post.Chanel.ID });
+            //}
+            return RedirectToAction("Error", "Home");
         }
+
+       // public IActionResult Error() => View();
+
         [HttpPost]
         public async Task<IActionResult> Edit (EditPostViewModel editPostViewModel)
         {   if (!ModelState.IsValid)

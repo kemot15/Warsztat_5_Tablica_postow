@@ -12,5 +12,7 @@ namespace ListaPostow.Controllers
         {
             return View();
         }
+
+        public IActionResult Error() => View();
     }
 }

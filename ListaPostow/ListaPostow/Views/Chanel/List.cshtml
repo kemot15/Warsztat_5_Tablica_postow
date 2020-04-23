@@ -11,23 +11,24 @@
 </p>
 
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Nazwa
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr style="background-color: @item.Color">
-                <td>
-                    @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
-                </td>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nazwa
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="background-color: @item.Color">
+                    <td>
+                        @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
