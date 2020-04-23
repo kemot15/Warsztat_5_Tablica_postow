@@ -1,11 +1,11 @@
-﻿@model ChanelDetailViewModel
+﻿@model ChanelsWithPostViewModel
 @inject UserManager<ListaPostow.Models.User> userManager
 
 @{
     ViewData["Title"] = "Kanały";
 }
 
-@*<div>@Html.PartialAsync("FavoriteList") </div>*@
+<div>@await Html.PartialAsync("_ChanelListPartial", Model.Chanels) </div>
     <div class="border-white container container-position">
         <div class="list-group ">
             <div style="background-color: @Model.Chanel.Color" class="list-group-item list-group-item-action flex-column align-items-start active">

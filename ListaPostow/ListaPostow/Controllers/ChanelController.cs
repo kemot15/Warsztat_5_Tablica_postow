@@ -10,6 +10,7 @@ using ListaPostow.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace ListaPostow.Controllers
 {
@@ -42,9 +43,24 @@ namespace ListaPostow.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
+            
+            var chanelList = await _chanelService.GetAllChanelsAsync();
             var user = await UserManager.GetUserAsync(User);
-            var chanel = await _chanelService.ChanelDetailAsync(id, user);            
-            return View(chanel);
+            if (id == 0)
+            {
+                id = chanelList.FirstOrDefault(ch => ch.OwnerID == user.Id).ID;
+            }
+            
+            var chanel = await _chanelService.ChanelDetailAsync(id, user);
+            var chanelsWithPost = new ChanelsWithPostViewModel()
+            {
+                Chanels = chanelList,
+                Chanel = chanel.Chanel,
+                ChanelID = chanel.ChanelID,
+                PostMessage = chanel.PostMessage,
+                Visible = chanel.Visible
+            };
+            return View(chanelsWithPost);
         }      
 
 

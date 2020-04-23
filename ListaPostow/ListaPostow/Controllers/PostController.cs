@@ -48,13 +48,13 @@ namespace ListaPostow.Controllers
             await postService.AddPostAsync(chanel.PostMessage, chanel.ChanelID, user);
             return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
         }
-
         
         public async Task<IActionResult> Delete(int postID, int chanelID)
         {
             await postService.DeleteAsync(postID);
             return RedirectToAction("Details", "Chanel", new { id = chanelID });
         }
+
         [HttpGet]
         public async Task<IActionResult> Edit (int postID)
         {
@@ -70,15 +70,8 @@ namespace ListaPostow.Controllers
                 };
                 return View(postModel);
             }
-            //else
-            //{
-            //    ModelState.AddModelError("", "Probujesz edytowac post do ktorego nie masz dostepu");
-            //    return RedirectToAction("Details", "Chanel", new { id = post.Chanel.ID });
-            //}
             return RedirectToAction("Error", "Home");
         }
-
-       // public IActionResult Error() => View();
 
         [HttpPost]
         public async Task<IActionResult> Edit (EditPostViewModel editPostViewModel)

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<ListaPostow.Models.Db.Chanel>
+<div class="container-fluid">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nazwa
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @*<tr style="background-color: @item.Color">
+                *@<tr >
+                    <td>
+                        <area class="rounded-circle" style="background-color: @item.Color" ></area>
+                        @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
+                    </td>
+                </tr>
+                }
+            </tbody>
+    </table>
+</div>
