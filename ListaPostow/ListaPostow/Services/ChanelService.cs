@@ -29,7 +29,7 @@ namespace ListaPostow.Services
 
         public async Task<List<Chanel>> GetAllChanelsAsync()
         {
-            return _context.Chanels.Include(ch => ch.ChanelUsers).ToList();
+            return await _context.Chanels.Include(ch => ch.ChanelUsers).Include(p => p.Posts).ToListAsync();
         }
 
         public async Task<List<Chanel>> GetUserChanelsAsync(int id)
@@ -39,8 +39,7 @@ namespace ListaPostow.Services
 
         public async Task<List<ChanelUsers>> GetFavoritedUserChanelsAsync(User user)
         {
-            var result = await _context.ChanelUsers.Include(ch => ch.Chanel).Where(u => u.User.Equals(user)).ToListAsync();
-            return result;
+            return await _context.ChanelUsers.Include(ch => ch.Chanel).Where(u => u.User.Equals(user)).ToListAsync(); ;
         }
 
         public async Task<Chanel> GetDefaultUserChanelAsync(int id)

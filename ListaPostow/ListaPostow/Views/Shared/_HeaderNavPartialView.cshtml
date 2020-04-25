@@ -1,0 +1,32 @@
+﻿<nav>
+    <ul class="navbar-nav ml-md-auto">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item">
+                @Html.ActionLink("Lista kanalów", "Details", "Chanel", null, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Lista ulubionych", "Favorite", "Chanel", null, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Ustawienia", "FavoriteList", "Chanel", null, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Wyloguj", "Details", "Chanel", null, new { @class = "nav-link" })
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                @Html.ActionLink("Logowanie", "Login", "Account", null, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Rejestracja", "Registration", "Account", null, new { @class = "nav-link" })
+            </li>
+        }
+    </ul>
+</nav>
+
+
+
+

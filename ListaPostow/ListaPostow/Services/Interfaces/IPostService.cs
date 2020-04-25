@@ -13,5 +13,6 @@ namespace ListaPostow.Services.Interfaces
         Task<bool> DeleteAsync(int postID);
         Task<Post> GetAsync(int postID);
         Task<bool> EditAsync(Post post);
+        Task<int> CountChanelPostAsync(int chanelID);
     }
 }

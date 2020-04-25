@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
+using PagedList;
 
 namespace ListaPostow.Controllers
 {
@@ -41,28 +42,35 @@ namespace ListaPostow.Controllers
 
         // GET: Chanel/Details/5
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, int? page, bool favoriteList = default)
         {
-            
-            var chanelList = await _chanelService.GetAllChanelsAsync();
+            //int pageSize = 5;
+            int currentPage = page ?? 1;
+            ViewBag.Page = currentPage;
             var user = await UserManager.GetUserAsync(User);
+            var chanelList = await _chanelService.GetAllChanelsAsync();        
             if (id == 0)
             {
                 id = chanelList.FirstOrDefault(ch => ch.OwnerID == user.Id).ID;
+                
             }
-            
+            //var chanelUser = await _chanelService.GetFavoritedUserChanelsAsync(user);
             var chanel = await _chanelService.ChanelDetailAsync(id, user);
+            chanel.PageSize = 5;
+            chanel.PageMax = (int)Math.Ceiling((double)chanel.Chanel.Posts.Count / chanel.PageSize);            
+            chanel.Chanel.Posts = chanel.Chanel.Posts.Skip((currentPage - 1) * chanel.PageSize).Take(chanel.PageSize).ToList();
             var chanelsWithPost = new ChanelsWithPostViewModel()
             {
                 Chanels = chanelList,
                 Chanel = chanel.Chanel,
                 ChanelID = chanel.ChanelID,
                 PostMessage = chanel.PostMessage,
-                Visible = chanel.Visible
+                Visible = chanel.Visible,
+                PageSize = chanel.PageSize,
+                PageMax = chanel.PageMax
             };
             return View(chanelsWithPost);
-        }      
-
+        }     
 
         // GET: Chanel/Create
         public async Task<IActionResult> Create()
@@ -88,7 +96,6 @@ namespace ListaPostow.Controllers
             return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
 
         }
-
 
 
         public async Task<IActionResult> Favorite ()

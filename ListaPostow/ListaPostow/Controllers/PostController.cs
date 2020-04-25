@@ -46,7 +46,9 @@ namespace ListaPostow.Controllers
 
             var user = await userManager.GetUserAsync(User);
             await postService.AddPostAsync(chanel.PostMessage, chanel.ChanelID, user);
-            return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
+            var postCount = await postService.CountChanelPostAsync(chanel.ChanelID);
+            int lastPage = (int)Math.Ceiling((double)postCount / chanel.PageSize);
+            return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID, page = lastPage});
         }
         
         public async Task<IActionResult> Delete(int postID, int chanelID)

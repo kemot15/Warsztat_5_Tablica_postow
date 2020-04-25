@@ -5,6 +5,7 @@ using ListaPostow.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -51,6 +52,11 @@ namespace ListaPostow.Services
         {
             _context.Update(post);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<int> CountChanelPostAsync(int chanelID)
+        {
+            return await _context.Posts.Include(ch => ch.Chanel).Where(p => p.Chanel.ID == chanelID).CountAsync();
         }
     }
 }

@@ -1,24 +1,15 @@
 ﻿@model IEnumerable<ListaPostow.Models.Db.Chanel>
-<div class="container-fluid">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Nazwa
-                </th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="col-12 col-md-3 col-xl-2 bd-sidebar">        
+        <nav class="bd-links">
+            @*class="list-group menu-partial-view"*@
             @foreach (var item in Model)
             {
-                @*<tr style="background-color: @item.Color">
-                *@<tr >
-                    <td>
-                        <area class="rounded-circle" style="background-color: @item.Color" ></area>
-                        @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
-                    </td>
-                </tr>
-                }
-            </tbody>
-    </table>
-</div>
+                <a class="bd-toc-link" asp-controller="Chanel" asp-action="Details" asp-route-id="@item.ID">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="badge badge-primary badge-pill" style="background-color: @item.Color">@item.Posts.Count</span>
+                        @item.Name
+                    </div>
+                </a>
+            }
+        </nav>
+    </div>
