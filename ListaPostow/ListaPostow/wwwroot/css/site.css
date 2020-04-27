@@ -21,8 +21,7 @@
     margin: auto;
 }
 .menu-partial-view {
-    width: 20%;
-    float: left;    
+    padding-top: 41px;
 }
 
 .menu-name-partial-view {
@@ -31,8 +30,8 @@
 }
 
 .scrollbar {
-    overflow: auto;
-    height:auto;
+    overflow-y: scroll;
+    height: 600px;
 }
 
 .sidenav {
@@ -80,12 +79,12 @@
 html {
   min-height: 100%;
 }
-body {
+/*body {
     background-color: white;
     text-align: left;
     /*background: url(../images/tlo.jpg) center  center;
     background-attachment:fixed;*/
-}
+}*/
 
 
 
@@ -512,4 +511,4 @@ margin: 0 auto !important;
 }
 .schedules-content-header {
   margin-bottom: 50px;
-}*/*/
+}*/

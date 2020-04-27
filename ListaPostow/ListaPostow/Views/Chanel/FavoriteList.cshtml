@@ -6,23 +6,6 @@
 }
 
 <h1>FavoriteList</h1>
-@*<form asp-action="FavoriteList1" method="post">
-        <button>Zapisz</button>
-    </form>*@
-
-@*@foreach (var item in Model)
-    {
-        <div>
-            <hr />
-            <dl class="row">
-                <input asp-for="@item.ID"  />
-                <input asp-for="@item.Visable" type="checkbox" />
-               <input asp-for="@item.Name" />
-            </dl>
-
-        </div>
-
-    }*@
 <form asp-action="FavoriteList1">
     @foreach (var chanel in Model.Chanels)
     {

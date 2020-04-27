@@ -1,4 +1,4 @@
-﻿@model IList<ListaPostow.Models.Db.ChanelUsers>
+﻿@model IList<ListaPostow.Models.Db.Chanel>
 
 @{
     ViewData["Title"] = "Kanały";
@@ -12,8 +12,8 @@
 @Html.ActionLink("Strona glowna", "Index", "Home")
 @Html.ActionLink("lista kanałów", "List", "Chanel")
 
-
-<table class="table">
+@Html.PartialAsync("_ChanelListPartial", Model)
+@*<table class="table">
     <thead>
         <tr>
             <th>
@@ -24,15 +24,17 @@
     <tbody>
         @foreach (var item in Model)
         {
-            if (item.Visable)
+            foreach(var t in item.ChanelUsers)
+              
+            if (t.Visable)
             {
-                <tr style="background-color: @item.Chanel.Color">
+                <tr style="background-color: @t.Chanel.Color">
                     <td>
-                        @Html.ActionLink(item.Chanel.Name, "Details", "Chanel", new { id = item.Chanel.ID })
+                        @Html.ActionLink(t.Chanel.Name, "Details", "Chanel", new { id = t.Chanel.ID })
                     </td>
                 </tr>
             }
 
         }
     </tbody>
-</table>
+</table>*@

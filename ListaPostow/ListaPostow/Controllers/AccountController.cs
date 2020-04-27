@@ -51,7 +51,7 @@ namespace ListaPostow.Controllers
                         OwnerID = user.Id,
                         Color = "blue"
                     };
-                    await _chanelService.CreateChanelAsync(chanel);
+                    await _chanelService.CreateChanelAsync(chanel, user);
                    // await _chanelService.AddToFavoriteAsync()
                     return RedirectToAction("Login");
                 }
@@ -77,6 +77,12 @@ namespace ListaPostow.Controllers
                 }
             }
             return View(loginViewModel);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await SignInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

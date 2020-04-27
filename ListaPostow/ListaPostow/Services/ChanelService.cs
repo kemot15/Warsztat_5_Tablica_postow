@@ -3,9 +3,7 @@ using ListaPostow.Models;
 using ListaPostow.Models.Db;
 using ListaPostow.Models.ViewModels;
 using ListaPostow.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,10 +19,12 @@ namespace ListaPostow.Services
             _context = context;
         }
 
-        public async Task<bool> CreateChanelAsync(Chanel chanel)
+        public async Task<bool> CreateChanelAsync(Chanel chanel, User user)
         {
             await _context.Chanels.AddAsync(chanel);
-            return await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync();
+            await AddToFavoriteAsync(chanel.ID, user);
+            return  result > 0;
         }
 
         public async Task<List<Chanel>> GetAllChanelsAsync()
@@ -37,9 +37,13 @@ namespace ListaPostow.Services
             return await _context.Chanels.Where(u => u.OwnerID == id).Include(u => u.Owner).ToListAsync();
         }
 
-        public async Task<List<ChanelUsers>> GetFavoritedUserChanelsAsync(User user)
-        {
-            return await _context.ChanelUsers.Include(ch => ch.Chanel).Where(u => u.User.Equals(user)).ToListAsync(); ;
+        public async Task<List<Chanel>> GetFavoritedUserChanelsAsync(User user)
+        {           
+            var result = (from chanel in _context.Chanels
+                          join chanelUsers in _context.ChanelUsers on chanel.ID  equals chanelUsers.ChanelID
+                          where chanelUsers.UserID == user.Id && chanelUsers.Visable
+                          select chanel);            
+            return await result.Include(p => p.Posts).Include(ch => ch.ChanelUsers).ThenInclude(u => u.User).ToListAsync();
         }
 
         public async Task<Chanel> GetDefaultUserChanelAsync(int id)
@@ -61,9 +65,10 @@ namespace ListaPostow.Services
             return details;
         }
 
-        public async Task<bool> AddToFavoriteAsync(int chanelId, User  user, bool visible)
+        public async Task<bool> AddToFavoriteAsync(int chanelId, User user, bool visible = true)
         {
             var result = _context.ChanelUsers.SingleOrDefault(u => u.ChanelID.Equals(chanelId) && u.User.Equals(user));
+            
             var chanel = _context.Chanels.Single(ch => ch.ID.Equals(chanelId));
             if (result == null)
             {
@@ -77,16 +82,13 @@ namespace ListaPostow.Services
                 await _context.AddAsync(chanelUser);
                 return await _context.SaveChangesAsync() > 0;
             }
-            result.Visable = visible ? false : true;
-            _context.Update(result);
+            var mainChanel = _context.ChanelUsers.First(u => u.User.Equals(user));
+            if (mainChanel.Equals(result)) //brak mozliwosci wylaczenia glownego kanalu z obserwowanych
+                return true; // result.Visable = true;
+            else
+                result.Visable = visible ? false : true;         
             return await _context.SaveChangesAsync() > 0;
         }
-
-        //public async Task<List<ChanelUsers>> GetAllChanelsWithVisabilityAsync()
-        //{
-        //    return _context.ChanelUsers.Include(ch => ch.Chanel).ToList();
-        //}
-
 
     }
 }
