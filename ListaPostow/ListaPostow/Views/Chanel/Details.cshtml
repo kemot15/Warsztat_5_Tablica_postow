@@ -1,0 +1,131 @@
+﻿@model ChanelsWithPostViewModel
+@inject UserManager<ListaPostow.Models.User> userManager
+
+@{
+    ViewData["Title"] = "Kanały";
+}
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+                @if (ViewBag.ShowFavoriteChanels)
+                {
+                    @Html.ActionLink("Pokaż wszystkie kanały", "Details", "Chanel", new { id = @Model.Chanel.ID, page = ViewBag.Page, favoriteChanels = false }, new { @class = "page-link bg-info" })
+                }
+                else
+                {
+                    @Html.ActionLink("Pokaż ulubione", "Details", "Chanel", new { id = @Model.Chanel.ID, page = ViewBag.Page, favoriteChanels = true }, new { @class = "page-link bg-success" })
+                }
+                @await Html.PartialAsync("_ChanelListPartial", Model.Chanels)
+            </div>
+
+                <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+                    <div class="container container-position">
+                        <div class="list-group ">
+                            <div style="background-color: @Model.Chanel.Color" class="list-group-item list-group-item-action flex-column align-items-start active">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Kanał: @Model.Chanel.Name</h5>
+                                    <div class="btn-group">
+                                        <form asp-action="AddFavorite" asp-route-favoriteChanels=@ViewBag.ShowFavoriteChanels>
+                                            <input type="hidden" asp-for="ChanelID" value="@Model.Chanel.ID" />
+                                            <input type="hidden" asp-for="Visible" value="@Model.Visible" />
+                                            @if (Model.Chanel.ID != ViewBag.MainChanelId) 
+                                            @if (Model.Visible)
+                                            {
+                                                <button type="submit" class="btn btn-warning">Obserwujesz</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-info">Obserwuj</button>
+                                            }
+                                        </form>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Napisz post</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @foreach (var item in Model.Chanel.Posts)
+                            {
+                                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <small class="text-muted">@item.User.UserName</small>
+                                        <div>
+                                            @if ((DateTime.Now - item.CreateDate).TotalMinutes < 10 && item.UserId == userManager.GetUserAsync(User).Result.Id)
+                                            {
+                                                <div class="btn-group btn-group-sm">
+                                                    @Html.ActionLink("Edytuj", "Edit", "Post", new { postID = item.ID }, new { @class = "btn btn-info" })
+                                                    @Html.ActionLink("Usuń", "Delete", "Post", new { postID = item.ID, chanelID = item.Chanel.ID }, new { @class = "btn btn-danger", onclick = "return confirm('Czy chcesz usunąć recepturę?')" })
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <p class="mb-1">@item.Text</p>
+                                    <small class="text-muted">@item.CreateDate</small>
+
+                                </div>
+                            }
+                        </div>
+
+                        <br />
+                        <ul class="pagination justify-content-center">
+                            @if (ViewBag.Page > 1)
+                            {
+                                <li class="page-item ">
+                                    @Html.ActionLink("Poprzednia", "Details", "Chanel", new { id = @Model.Chanel.ID, page = (ViewBag.Page - 1), favoriteChanels = ViewBag.ShowFavoriteChanels }, new { @class = "page-link" })
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    @Html.ActionLink("Poprzednia", "Details", "Chanel", new { id = @Model.Chanel.ID, page = (ViewBag.Page - 1), favoriteChanels = ViewBag.ShowFavoriteChanels }, new { @class = "page-link" })
+                                </li>
+                            }
+
+                            <li class="page-item"><a class="page-link" href="#">@ViewBag.Page</a></li>
+                            @if (ViewBag.Page < Model.PageMax)
+                            {
+                                <li class="page-item ">
+                                    @Html.ActionLink("Następna", "Details", "Chanel", new { id = @Model.Chanel.ID, page = (ViewBag.Page + 1), favoriteChanels = ViewBag.ShowFavoriteChanels }, new { @class = "page-link" })
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    @Html.ActionLink("Następna", "Details", "Chanel", new { id = @Model.Chanel.ID, page = (ViewBag.Page + 1), favoriteChanels = ViewBag.ShowFavoriteChanels }, new { @class = "page-link" })
+                                </li>
+                            }
+
+                        </ul>
+
+                        <form asp-action="Add" asp-controller="Post">
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Nowy post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="message-text" class="col-form-label">Wiadomość:</label>
+                                                <input type="hidden" asp-for="ChanelID" value="@Model.Chanel.ID" />
+                                                <input type="hidden" asp-for="PageSize" value="@Model.PageSize" />
+                                                <textarea class="form-control" asp-for="PostMessage"></textarea>
+                                                <span asp-validation-for="PostMessage"></span>
+                                                @Html.ValidationSummary()
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                                            <button type="submit" class="btn btn-primary">Dodaj post</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </main>
+            </div>
+    </div>
+

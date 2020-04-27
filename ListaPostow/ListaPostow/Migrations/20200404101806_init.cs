@@ -162,18 +162,17 @@ namespace ListaPostow.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 255, nullable: false),
                     Color = table.Column<string>(nullable: true),
-                    OwnerID = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: true)
+                    OwnerID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Chanels", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Chanels_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Chanels_AspNetUsers_OwnerID",
+                        column: x => x.OwnerID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,6 +182,7 @@ namespace ListaPostow.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserID = table.Column<int>(nullable: false),
+                    Visable = table.Column<bool>(nullable: false),
                     ChanelID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -199,7 +199,7 @@ namespace ListaPostow.Migrations
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -270,9 +270,9 @@ namespace ListaPostow.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chanels_UserId",
+                name: "IX_Chanels_OwnerID",
                 table: "Chanels",
-                column: "UserId");
+                column: "OwnerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChanelUsers_ChanelID",

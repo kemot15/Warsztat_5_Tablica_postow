@@ -1,0 +1,26 @@
+﻿@model ChanelVisableViewModel
+@{
+    ViewData["Title"] = "Kanały";
+}
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.ActionLink(Model.MainChanel.Name, "Show", "Post", new { id = ViewBag.domyslny})
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Chanels)
+            {
+                <tr style="background-color: @item.Color">
+                    <td>
+                        @Html.ActionLink(item.Name, "Show", "Post", new { id = item.ID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

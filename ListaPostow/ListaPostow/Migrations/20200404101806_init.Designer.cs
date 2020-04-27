@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListaPostow.Migrations
 {
     [DbContext(typeof(PostContext))]
-    [Migration("20200401222147_init")]
+    [Migration("20200404101806_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,12 +39,9 @@ namespace ListaPostow.Migrations
                     b.Property<int>("OwnerID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("OwnerID");
 
                     b.ToTable("Chanels");
                 });
@@ -61,6 +58,9 @@ namespace ListaPostow.Migrations
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Visable")
+                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -299,9 +299,11 @@ namespace ListaPostow.Migrations
 
             modelBuilder.Entity("ListaPostow.Models.Db.Chanel", b =>
                 {
-                    b.HasOne("ListaPostow.Models.User", "User")
+                    b.HasOne("ListaPostow.Models.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ListaPostow.Models.Db.ChanelUsers", b =>

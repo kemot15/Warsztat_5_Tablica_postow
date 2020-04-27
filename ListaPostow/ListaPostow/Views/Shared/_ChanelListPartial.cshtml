@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ListaPostow.Models.Db.Chanel>
+            
+        <nav class="bd-links scrollbar" >
+            @foreach (var item in Model)
+            {
+                <a class="bd-toc-link" asp-controller="Chanel" asp-action="Details" asp-route-id="@item.ID" asp-route-favoriteChanels=@ViewBag.ShowFavoriteChanels>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="badge badge-primary badge-pill" style="background-color: @item.Color">@item.Posts.Count</span>
+                        @item.Name
+                    </div>
+                </a>
+            }
+        </nav>
+    

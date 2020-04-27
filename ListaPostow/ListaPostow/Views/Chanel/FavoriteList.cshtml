@@ -1,0 +1,23 @@
+﻿@*@model IList<FavoriteViewModel>;*@
+@model FavoriteViewModel
+
+@{
+    ViewData["Title"] = "FavoriteList";
+}
+
+<h1>FavoriteList</h1>
+<form asp-action="FavoriteList1">
+    @foreach (var chanel in Model.Chanels)
+    {
+        <input asp-for="@chanel.ID" />
+        <input asp-for="@chanel.ChanelUsers.First().Visable" type="checkbox" />
+        <input asp-for="@chanel.Name" />
+
+
+    }
+
+    <a asp-action="FavoriteList1" asp-controller="Chanel">Zapisz</a>
+
+    <button type="submit">zapisz1</button>
+</form>
+

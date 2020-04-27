@@ -1,0 +1,51 @@
+﻿@model IList<ListaPostow.Models.Db.Chanel>
+@inject UserManager<ListaPostow.Models.User> userManager
+@{
+    ViewData["Title"] = "Kanały";
+}
+
+<h1>Kanały</h1>
+
+<p>
+    <a asp-action="Create">Dodaj nowy kanał</a>
+</p>
+
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nazwa
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="background-color: @item.Color">
+                    <td>
+                        @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
+
+                        @if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id) == null)
+                        {
+                            @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
+                        }
+                        else
+                        {
+                            @if (item.ID != Model.First(u => u.OwnerID == userManager.GetUserAsync(User).Result.Id).ID)
+                                if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id).Visable)
+                                {
+                                    @Html.ActionLink("Obserwujesz", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = true }, new { @class = "btn btn-warning" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
+                                }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
