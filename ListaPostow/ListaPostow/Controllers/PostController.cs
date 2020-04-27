@@ -51,16 +51,25 @@ namespace ListaPostow.Controllers
             return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID, page = lastPage});
         }
         
-        public async Task<IActionResult> Delete(int postID, int chanelID)
+        public async Task<IActionResult> Delete(int postID)
         {
-            await postService.DeleteAsync(postID);
-            return RedirectToAction("Details", "Chanel", new { id = chanelID });
+            var post = await postService.GetAsync(postID);
+            var chanelID = post.Chanel.ID;
+            if (post != null)
+            {
+                if ((DateTime.Now - post.CreateDate).TotalMinutes < 10 && post.UserId == userManager.GetUserAsync(User).Result.Id)
+                {
+                    await postService.DeleteAsync(postID);
+                    return RedirectToAction("Details", "Chanel", new { id = chanelID });
+                }                
+            }
+            //var errorInfo = "Nie masz uprawnień do usunięcia tego posta.";
+            return RedirectToAction("Error", "Home");
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit (int postID)
-        {
-            
+        {            
             var post = await postService.GetAsync(postID);
             if (post != null)
             if ((DateTime.Now - post.CreateDate).TotalMinutes < 10 && post.UserId == userManager.GetUserAsync(User).Result.Id)
