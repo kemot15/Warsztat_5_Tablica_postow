@@ -52,7 +52,7 @@
                                             {
                                                 <div class="btn-group btn-group-sm">
                                                     @Html.ActionLink("Edytuj", "Edit", "Post", new { postID = item.ID }, new { @class = "btn btn-info" })
-                                                    @Html.ActionLink("Usuń", "Delete", "Post", new { postID = item.ID, chanelID = item.Chanel.ID }, new { @class = "btn btn-danger", onclick = "return confirm('Czy chcesz usunąć recepturę?')" })
+                                                    @Html.ActionLink("Usuń", "Delete", "Post", new { postID = item.ID }, new { @class = "btn btn-danger", onclick = "return confirm('Czy chcesz usunąć recepturę?')" })
                                                 </div>
                                             }
                                         </div>

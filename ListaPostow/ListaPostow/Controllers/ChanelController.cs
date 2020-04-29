@@ -69,7 +69,8 @@ namespace ListaPostow.Controllers
         }     
 
         // GET: Chanel/Create
-        public async Task<IActionResult> Create()
+        [HttpGet]
+        public IActionResult Create()
         {
             return View();
         }
@@ -84,11 +85,11 @@ namespace ListaPostow.Controllers
             return View();            
         }
 
-        public async Task<IActionResult> AddFavorite(ChanelDetailViewModel chanel, bool favoriteChanels)
+        public async Task<IActionResult> AddFavorite(ChanelDetailViewModel chanelModel, bool favoriteChanels)
         {
             var user = await UserManager.GetUserAsync(User);
-            await _chanelService.AddToFavoriteAsync(chanel.ChanelID, user, chanel.Visible);
-            return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID, favoriteChanels = favoriteChanels });
+            await _chanelService.AddToFavoriteAsync(chanelModel.ChanelID, user, chanelModel.Visible);
+            return RedirectToAction("Details", "Chanel", new { id = chanelModel.ChanelID, favoriteChanels = favoriteChanels });
         }
 
         public async Task<IActionResult> Favorite ()
@@ -97,25 +98,12 @@ namespace ListaPostow.Controllers
             var chanelUser = await _chanelService.GetFavoritedUserChanelsAsync(user);
             return View(chanelUser);
         }
-        
-        
+
         public async Task<IActionResult> FavoriteList(int chanelID, bool visible)
         {
             var user = await UserManager.GetUserAsync(User);
             await _chanelService.AddToFavoriteAsync(chanelID, user, visible);
             return RedirectToAction("List");
         }
-
-        //public async Task<IActionResult> FavoriteList1(IList<FavoriteViewModel> model)
-        public async Task<IActionResult> FavoriteList1(FavoriteViewModel model)
-        {
-            var user = await UserManager.GetUserAsync(User);
-            foreach (var chanel in model.Chanels)
-            {
-                await _chanelService.AddToFavoriteAsync(chanel.ID, user, !chanel.ChanelUsers.First().Visable);
-            }
-            return RedirectToAction("Favorite");
-        }
-
     }
 }

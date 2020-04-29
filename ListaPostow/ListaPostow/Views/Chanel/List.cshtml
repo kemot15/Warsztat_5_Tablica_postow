@@ -24,25 +24,28 @@
             @foreach (var item in Model)
             {
                 <tr style="background-color: @item.Color">
-                    <td>
-                        @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
-
-                        @if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id) == null)
-                        {
-                            @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
-                        }
-                        else
-                        {
-                            @if (item.ID != Model.First(u => u.OwnerID == userManager.GetUserAsync(User).Result.Id).ID)
-                                if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id).Visable)
-                                {
-                                    @Html.ActionLink("Obserwujesz", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = true }, new { @class = "btn btn-warning" })
-                                }
-                                else
-                                {
-                                    @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
-                                }
-                        }
+                    <td class="d-flex">
+                        <div>
+                            @Html.ActionLink(item.Name, "Details", "Chanel", new { id = item.ID })
+                        </div>
+                        <div class="ml-md-auto">
+                            @if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id) == null)
+                            {
+                                @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
+                            }
+                            else
+                            {
+                                @if (item.ID != Model.First(u => u.OwnerID == userManager.GetUserAsync(User).Result.Id).ID)
+                                    if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id).Visable)
+                                    {
+                                        @Html.ActionLink("Obserwujesz", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = true }, new { @class = "btn btn-warning" })
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
+                                    }
+                            }
+                        </div>
                     </td>
                 </tr>
             }

@@ -13,28 +13,3 @@
 @Html.ActionLink("lista kanałów", "List", "Chanel")
 
 @Html.PartialAsync("_ChanelListPartial", Model)
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Nazwa
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            foreach(var t in item.ChanelUsers)
-              
-            if (t.Visable)
-            {
-                <tr style="background-color: @t.Chanel.Color">
-                    <td>
-                        @Html.ActionLink(t.Chanel.Name, "Details", "Chanel", new { id = t.Chanel.ID })
-                    </td>
-                </tr>
-            }
-
-        }
-    </tbody>
-</table>*@
