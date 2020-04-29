@@ -14,7 +14,7 @@ namespace ListaPostow.Models.Db
             CreateDate = DateTime.Now;
         }
         public int ID { get; set; }
-        [Required, MaxLength]
+        [Required(ErrorMessage = "Pole wymagane"), MaxLength]
         public string Text { get; set; }
         [Column(TypeName = "datetime2(7)")]
         public DateTime CreateDate { get; set; }

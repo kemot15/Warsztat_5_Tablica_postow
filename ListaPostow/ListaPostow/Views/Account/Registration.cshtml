@@ -4,15 +4,12 @@
     ViewData["Title"] = "Rejestracja";
 }
 
-<h1>Rejestracja</h1>
-
-
-<hr />
 
 @{await Html.PartialAsync("_ValidationScriptsPartial");}
-<div class="container">
+<div class="container pt-5">
     <div class="container col-md-4">
-        <form asp-action="Registration" class="text-center">
+        <form asp-action="Registration">
+            <h2>Rejestracja</h2>
             <div>@Html.ValidationSummary()</div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -21,17 +18,17 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label class="control-label">E-mail</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
+                <label class="control-label">Hasło</label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReapeatPassword" class="control-label"></label>
+                <label class="control-label">Powtórz hasło</label>
                 <input asp-for="ReapeatPassword" class="form-control" />
                 <span asp-validation-for="ReapeatPassword" class="text-danger"></span>
             </div>
@@ -40,10 +37,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index" asp-controller="Home">Powrót do strony głównej</a>
 </div>
 
 @*@section Scripts {

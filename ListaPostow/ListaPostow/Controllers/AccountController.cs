@@ -52,10 +52,13 @@ namespace ListaPostow.Controllers
                         Color = "blue"
                     };
                     await _chanelService.CreateChanelAsync(chanel, user);
-                   // await _chanelService.AddToFavoriteAsync()
                     return RedirectToAction("Login");
                 }
-            }            
+                else
+                {
+                    ModelState.AddModelError("", "Nie można się zarejestrować");
+                }
+            }
             return View(registrationViewModel);
         }
 

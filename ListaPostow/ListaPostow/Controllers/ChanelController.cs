@@ -79,10 +79,15 @@ namespace ListaPostow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Chanel chanel)
         {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Nie można utworzyć kanału");
+                return View(chanel);
+            }
             var user = await UserManager.GetUserAsync(User);
             chanel.OwnerID = user.Id;            
             await _chanelService.CreateChanelAsync(chanel, user);
-            return View();            
+            return RedirectToAction("List", "Chanel");            
         }
 
         public async Task<IActionResult> AddFavorite(ChanelDetailViewModel chanelModel, bool favoriteChanels)
@@ -99,6 +104,7 @@ namespace ListaPostow.Controllers
             return View(chanelUser);
         }
 
+        //akcja dodaje do/usuwa z listy ulubionych kanalow
         public async Task<IActionResult> FavoriteList(int chanelID, bool visible)
         {
             var user = await UserManager.GetUserAsync(User);

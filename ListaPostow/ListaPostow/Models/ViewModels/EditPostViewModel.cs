@@ -10,6 +10,5 @@ namespace ListaPostow.Models.ViewModels
     {
         public int ChanelID { get; set; }
         public Post Post { get; set; }
-
     }
 }
