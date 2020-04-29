@@ -4,32 +4,33 @@
     ViewData["Title"] = "Kanał";
 }
 
-<h1>Create</h1>
-
-<h4>Chanel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container pt-5">
+    <div class="container col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h2>Nowy kanał</h2>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label class="control-label">Nazwa</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Color" class="control-label"></label>
+                <label class="control-label">Kolor</label>
                 <input type="color" asp-for="Color" class="form-control" />
                 <span asp-validation-for="Color" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="btn-group btn-group-sm">
+                <div>
+                    <input type="submit" value="Dodaj" class="btn btn-primary" />
+                </div>
+                <div>
+                    <a asp-action="List" asp-controller="Chanel" class="btn btn-danger">Anuluj</a>
+                </div>
             </div>
+            
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 

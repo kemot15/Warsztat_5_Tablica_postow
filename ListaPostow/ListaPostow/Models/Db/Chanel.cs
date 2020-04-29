@@ -10,7 +10,8 @@ namespace ListaPostow.Models.Db
     public class Chanel
     {
         public int ID { get; set; }
-        [Required, StringLength(255)]
+        [StringLength(255)]
+        [Required(ErrorMessage = "Pole wymagane")]
         public string Name { get; set; }
         public string Color { get; set; }
         public int OwnerID { get; set; }
