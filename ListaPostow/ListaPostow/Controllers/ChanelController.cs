@@ -6,11 +6,13 @@ using ListaPostow.Models;
 using ListaPostow.Models.Db;
 using ListaPostow.Models.ViewModels;
 using ListaPostow.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ListaPostow.Controllers
 {
+    [Authorize]
     public class ChanelController : Controller
     {
         private readonly UserManager<User> UserManager;
@@ -25,7 +27,7 @@ namespace ListaPostow.Controllers
         }
 
         // GET: Chanel
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -94,7 +96,7 @@ namespace ListaPostow.Controllers
         {
             var user = await UserManager.GetUserAsync(User);
             await _chanelService.AddToFavoriteAsync(chanelModel.ChanelID, user, chanelModel.Visible);
-            return RedirectToAction("Details", "Chanel", new { id = chanelModel.ChanelID, favoriteChanels = favoriteChanels });
+            return RedirectToAction("Details", "Chanel", new { id = chanelModel.ChanelID, favoriteChanels });
         }
 
         public async Task<IActionResult> Favorite ()

@@ -24,13 +24,10 @@ namespace ListaPostow.Controllers
             _chanelService = chanelService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpGet]
-        public async Task<IActionResult> Registration() => View();
+        public IActionResult Registration() => View();
         
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel registrationViewModel) 
@@ -63,7 +60,7 @@ namespace ListaPostow.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login() => View();
+        public IActionResult Login() => View();
         [HttpPost]
         public async Task<IActionResult> Login (LoginViewModel loginViewModel)
         {
