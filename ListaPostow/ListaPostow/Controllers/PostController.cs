@@ -35,20 +35,19 @@ namespace ListaPostow.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Add(ChanelDetailViewModel chanel)
+        public async Task<IActionResult> Add(ChanelDetailViewModel chanelModel)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Puste pole");
-                return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID });
+                return RedirectToAction("Details", "Chanel", new { id = chanelModel.ChanelID });
             }
 
             var user = await userManager.GetUserAsync(User);
-            await postService.AddPostAsync(chanel.PostMessage, chanel.ChanelID, user);
-            var postCount = await postService.CountChanelPostAsync(chanel.ChanelID);
-            int lastPage = (int)Math.Ceiling((double)postCount / chanel.PageSize);
-            return RedirectToAction("Details", "Chanel", new { id = chanel.ChanelID, page = lastPage});
+            await postService.AddPostAsync(chanelModel.PostMessage, chanelModel.ChanelID, user);
+            var postCount = await postService.CountChanelPostAsync(chanelModel.ChanelID);
+            int lastPage = (int)Math.Ceiling((double)postCount / chanelModel.PageSize);
+            return RedirectToAction("Details", "Chanel", new { id = chanelModel.ChanelID, page = lastPage});
         }
         
         public async Task<IActionResult> Delete(int postID)
