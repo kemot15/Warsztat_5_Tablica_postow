@@ -4,8 +4,11 @@ using ListaPostow.Models.Db;
 using ListaPostow.Models.ViewModels;
 using ListaPostow.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace ListaPostow.Services
@@ -38,7 +41,7 @@ namespace ListaPostow.Services
         }
 
         public async Task<List<Chanel>> GetFavoritedUserChanelsAsync(User user)
-        {           
+        {     
             var result = (from chanel in _context.Chanels
                           join chanelUsers in _context.ChanelUsers on chanel.ID  equals chanelUsers.ChanelID
                           where chanelUsers.UserID == user.Id && chanelUsers.Visable
@@ -87,6 +90,22 @@ namespace ListaPostow.Services
                 return true; // result.Visable = true;
             else
                 result.Visable = visible ? false : true;         
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteChanelAsync(int chanelID, User user)
+        {
+            Chanel? chanel = await _context.Chanels.Include(p => p.Posts).Include(l => l.ChanelUsers).SingleAsync(ch => ch.ID.Equals(chanelID));
+            if (chanel == null)
+                return false;
+            var mainChanel = _context.Chanels.First(u => u.OwnerID == user.Id).ID;
+            if (chanel.OwnerID == user.Id && mainChanel != chanel.ID)
+            {
+                _context.Posts.RemoveRange(chanel.Posts);
+                _context.ChanelUsers.RemoveRange(chanel.ChanelUsers);
+                _context.Chanels.Remove(chanel);                
+            }
+            
             return await _context.SaveChangesAsync() > 0;
         }
 
