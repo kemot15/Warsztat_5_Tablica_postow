@@ -17,5 +17,6 @@ namespace ListaPostow.Services.Interfaces
         Task<ChanelDetailViewModel> ChanelDetailAsync(int id, User user);
         Task<bool> AddToFavoriteAsync(int chanelId, User user, bool visible);
         Task<List<Chanel>> GetFavoritedUserChanelsAsync(User user);
+        Task<bool> DeleteChanelAsync (int chanelID, User user);
     }
 }

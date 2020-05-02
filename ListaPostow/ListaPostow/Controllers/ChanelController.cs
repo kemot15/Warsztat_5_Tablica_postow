@@ -113,5 +113,14 @@ namespace ListaPostow.Controllers
             await _chanelService.AddToFavoriteAsync(chanelID, user, visible);
             return RedirectToAction("List");
         }
+
+        public async Task<IActionResult> Delete (int chanelID)
+        {
+            var user = await UserManager.GetUserAsync(User);
+            var result = await _chanelService.DeleteChanelAsync(chanelID, user);
+            if(result)
+                return RedirectToAction("List");
+            return RedirectToAction("Error", "Home");
+        }
     }
 }
