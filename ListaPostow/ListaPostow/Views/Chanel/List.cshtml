@@ -32,24 +32,29 @@
                             <div>
                                 @if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id) == null)
                                 {
-                                    @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
+                                @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
                                 }
                                 else
                                 {
-                                    @if (item.ID != Model.First(u => u.OwnerID == userManager.GetUserAsync(User).Result.Id).ID)
+                                @if (item.ID != Model.First(u => u.OwnerID == userManager.GetUserAsync(User).Result.Id).ID)
                                         if (item.ChanelUsers.FirstOrDefault(d => d.UserID == userManager.GetUserAsync(User).Result.Id).Visable)
                                         {
-                                            @Html.ActionLink("Obserwujesz", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = true }, new { @class = "btn btn-warning" })
-                                       
-                                                @if (item.OwnerID.Equals(userManager.GetUserAsync(User).Result.Id))
+                                @Html.ActionLink("Obserwujesz", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = true }, new { @class = "btn btn-warning" })
+
+                                @if (item.OwnerID.Equals(userManager.GetUserAsync(User).Result.Id))
                                                 {
-                                                    @Html.ActionLink("Usuń", "Delete", "Chanel", new { chanelID = item.ID }, new { @class = "btn btn-info", onclick = "return confirm('Czy chcesz usunąć kanał?')" });
+                                @Html.ActionLink("Usuń", "Delete", "Chanel", new { chanelID = item.ID }, new { @class = "btn btn-info", onclick = "return confirm('Czy chcesz usunąć kanał?')" });
                                                 }
-                                           
+
                                         }
                                         else
                                         {
-                                            @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
+                                @Html.ActionLink("Obserwuj", "FavoriteList", "Chanel", new { chanelID = item.ID, visible = false }, new { @class = "btn btn-info" })
+
+                                @if (item.OwnerID.Equals(userManager.GetUserAsync(User).Result.Id))
+                                                {
+                                @Html.ActionLink("Usuń", "Delete", "Chanel", new { chanelID = item.ID }, new { @class = "btn btn-info", onclick = "return confirm('Czy chcesz usunąć kanał?')" });
+                                                }
                                         }
 
                                 }
