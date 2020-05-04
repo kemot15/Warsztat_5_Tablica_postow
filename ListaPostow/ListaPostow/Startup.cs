@@ -48,6 +48,10 @@ namespace ListaPostow
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
